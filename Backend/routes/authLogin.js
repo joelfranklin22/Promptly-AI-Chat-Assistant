@@ -9,12 +9,14 @@ import {
 const router = express.Router();
 
 router.post("/login", async (req, res) => {
+
   // email and password from body request
   const { email, password } = req.body;
-  //   checking the email and password in db
+
+    //   checking the email and password in db
   try {
     const [rows] = await db.execute(
-      "Select id,password from userregister where email=?",
+      "Select id,password from users where email=?",
       [email],
     );
     console.log(rows);
@@ -23,11 +25,14 @@ router.post("/login", async (req, res) => {
     if (rows.length == 0) {
       return res.status(401).json({ msg: "user not exists" });
     } else {
+
       // if data exists
       try {
+
         // Compare db password and req body password
         const hashedPassword = rows[0].password;
         const isMatch = await bcrypt.compare(password, hashedPassword);
+        
         // if pasword macthed
         if (isMatch) {
           // token generation here
