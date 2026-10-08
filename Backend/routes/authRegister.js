@@ -15,7 +15,7 @@ router.post("/register", async (req, res) => {
   try {
     // Searching for user in db
     const [existingRows] = await db.execute(
-      "Select * from userRegister where email=?",
+      "Select * from users where email=?",
       [email],
     );
 
@@ -30,11 +30,14 @@ router.post("/register", async (req, res) => {
 
       // Inserting into db name,email,hashed password
       const [rows] = await db.execute(
-        "INSERT INTO userRegister (name, email, password) VALUES (?, ?, ?)",
+        "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
         [name, email, hashedPassword],
       );
       try {
         const accessToken = generateAccessTokens(rows.insertId);
+        console.log(rows);
+        console.log(rows.insertId);
+
         const refreshToken = generateRefreshTokens(rows.insertId);
 
         console.log("accessToken", accessToken);
@@ -51,7 +54,6 @@ router.post("/register", async (req, res) => {
           msg: "Rows Added",
           accessToken,
         });
-        console.log(accessToken, refreshToken);
       } catch (error) {
         console.log(error);
 
