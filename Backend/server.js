@@ -3,11 +3,11 @@ import cors from "cors";
 import db from "./config/database.js";
 import registerRoutes from "./routes/authRegister.js";
 import loginRoutes from "./routes/authLogin.js";
-import chatRoutes from "./routes/chat.js";
 import cookieParser from "cookie-parser";
 import refreshToken from "./utils/refreshToken.js";
+import chatRoutes from "./routes/chatRoute.js";
 
-const app = express();
+const app = express();  
 
 // Using cors for verifying frontend and backend
 app.use(
@@ -25,8 +25,8 @@ app.use(cookieParser());
 // Routes for different url
 app.use("/api/auth", registerRoutes);
 app.use("/api/auth", loginRoutes);
-app.use("/api/chat", chatRoutes);
 app.use("/api/refreshtokens", refreshToken);
+app.use("/chat", chatRoutes);
 
 app.listen(4000, () => {
   console.log("Server started Running");
