@@ -1,8 +1,24 @@
 import { useState } from "react";
 import styles from "../styles/Chat.module.css";
+import { sendMsg } from "../api/authApi";
 
 function Chat() {
   const [isOpen, setIsOpen] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  const sendData = async (e) => {
+    e.preventDefault();
+    console.log(msg);
+
+    try {
+      const res = await sendMsg(msg);
+      console.log(res);
+
+      setMsg("");
+    } catch (error) {
+      console.log("error in sending msg", error);
+    }
+  };
 
   return (
     <>
@@ -57,14 +73,25 @@ function Chat() {
               </p>
             </div>
             <div className={styles.reqMessage}>
-              <p>Hi, how do I center a div?</p>
+              <p>{msg}</p>
             </div>
           </section>
           {/* Footer */}
           <footer className="messageFooter">
-            <form action="" className={styles.messageBox}>
-              <input type="text" name="" id="" placeholder="Type a message" />
-              <button className={styles.sendChat}>Send</button>
+            <form action="" onSubmit={sendData} className={styles.messageBox}>
+              <input
+                type="text"
+                name=""
+                placeholder="Type a message"
+                value={msg}
+                onChange={(e) => {
+                  setMsg(e.target.value);
+                }}
+              />
+
+              <button className={styles.sendChat} type="sumbit">
+                Send
+              </button>
             </form>
           </footer>
         </div>
