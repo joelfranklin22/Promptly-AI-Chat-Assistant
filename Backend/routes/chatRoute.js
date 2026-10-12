@@ -5,7 +5,7 @@ import db from "../config/database.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const req_msg = req.body.message;
+  const req_msg = req.body.req_message;
   const user_id = req.body.id;
   console.log(user_id);
 
