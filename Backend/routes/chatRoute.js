@@ -5,9 +5,11 @@ import db from "../config/database.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const req_msg = req.body.req_message;
+  const req_msg = req.body.message;
+  console.log("req msg from frontend", req.body.message);
+
   const user_id = req.body.id;
-  console.log(user_id);
+  console.log("user id", user_id);
 
   //   Storing user msg in db
   try {
@@ -15,7 +17,7 @@ router.post("/", async (req, res) => {
       "INSERT INTO chats (users_id,sender_req) VALUE (?,?)",
       [user_id, req_msg],
     );
-    console.log(rows);
+    console.log("db inserting rows", rows);
   } catch (error) {
     console.log("error in db inserting", error);
   }
@@ -29,7 +31,7 @@ router.post("/", async (req, res) => {
     );
 
     console.log(res_n8n.data.response_msg);
-    res.status(200).json({ msg: res_n8n.data.response_msg });
+    res.status(200).json({ response_message: res_n8n.data.response_msg });
 
     // Inserting response data into db
     try {
