@@ -65,31 +65,39 @@
   padding: 1rem;
   border: 1px solid deeppink;
 }
-.headTitle{
+.headTitle {
   display: flex;
   justify-content: space-between;
 }
 .chat {
   border: 1px solid deepskyblue;
-  height: 80vh;
   display: flex;
-  justify-content: space-between;
-  align-items: end;
-  flex-wrap: wrap;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  gap: 1rem;
+
+  padding: 1rem;
+  overflow-y: auto;
 }
 .resMessage {
-  flex: 1;
   align-self: flex-start;
+  max-width: 75%;
   padding: 1rem;
-  margin: 2rem;
   border: 1px solid orange;
+  border-radius: 12px;
+  overflow-wrap: anywhere;
 }
+
 .reqMessage {
-  padding: 1rem;
-  margin: 2rem;
   align-self: flex-end;
+  max-width: 75%;
+  padding: 1rem;
   border: 1px solid dodgerblue;
+  border-radius: 12px;
+  overflow-wrap: anywhere;
 }
+
 .messageBox {
   display: flex;
   gap: 2rem;
