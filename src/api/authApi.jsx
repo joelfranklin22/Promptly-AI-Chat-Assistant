@@ -21,8 +21,8 @@ export const checkUser = async (email, password) => {
   );
 };
 
-export const sendMsg = async (req_message) => {
+export const sendMsg = async (message) => {
   return axios.post("http://localhost:4000/chat", {
-    req_message,
+    message,
   });
 };
