@@ -4,17 +4,25 @@ import { sendMsg } from "../api/authApi";
 
 function Chat() {
   const [isOpen, setIsOpen] = useState(false);
-  const [msg, setMsg] = useState("");
+  const [inputMessage, setInputMessage] = useState("");
+  const [messages, setMessages] = useState([]);
 
   const sendData = async (e) => {
     e.preventDefault();
-    console.log(msg);
+
+    console.log(inputMessage);
+    // adding input msg in the state
+    setMessages((prev) => [...prev, { sender: "user", text: inputMessage }]);
 
     try {
-      const res = await sendMsg(msg);
-      console.log(res);
+      const res = await sendMsg(inputMessage);
+      console.log(res.data.response_message);
 
-      setMsg("");
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: res.data.response_message },
+      ]);
+      setInputMessage(" ");
     } catch (error) {
       console.log("error in sending msg", error);
     }
@@ -64,18 +72,23 @@ function Chat() {
               <i>dark theme</i>
             </div>
           </header>
+
           {/* section */}
           <section className={styles.chat}>
-            <div className={styles.resMessage}>
-              <p>
-                Use flexbox — display flex, align items center, justify content
-                center.
-              </p>
-            </div>
-            <div className={styles.reqMessage}>
-              <p>{msg}</p>
-            </div>
+            {messages.map((messages, index) => (
+              <div
+                key={index}
+                className={
+                  messages.sender === "bot"
+                    ? styles.resMessage
+                    : styles.reqMessage
+                }
+              >
+                <p>{messages.text}</p>
+              </div>
+            ))}
           </section>
+
           {/* Footer */}
           <footer className="messageFooter">
             <form action="" onSubmit={sendData} className={styles.messageBox}>
@@ -83,13 +96,13 @@ function Chat() {
                 type="text"
                 name=""
                 placeholder="Type a message"
-                value={msg}
+                value={inputMessage}
                 onChange={(e) => {
-                  setMsg(e.target.value);
+                  setInputMessage(e.target.value);
                 }}
               />
 
-              <button className={styles.sendChat} type="sumbit">
+              <button className={styles.sendChat} type="submit">
                 Send
               </button>
             </form>
