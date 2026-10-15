@@ -21,8 +21,16 @@ export const checkUser = async (email, password) => {
   );
 };
 
-export const sendMsg = async (message) => {
-  return axios.post("http://localhost:4000/chat", {
-    message,
-  });
+export const sendMsg = async (message, accessTokens) => {
+  return axios.post(
+    "http://localhost:4000/chat",
+    {
+      message,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessTokens}`,
+      },
+    },
+  );
 };
