@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styles from "../styles/Chat.module.css";
 import { sendMsg } from "../api/authApi";
+import AuthContext from "../context/AuthContext";
 
 function Chat() {
   const [isOpen, setIsOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const { accessTokens } = useContext(AuthContext);
 
   const sendData = async (e) => {
     e.preventDefault();
@@ -14,15 +16,15 @@ function Chat() {
     // adding input msg in the state
     setMessages((prev) => [...prev, { sender: "user", text: inputMessage }]);
 
+    setInputMessage(" ");
     try {
-      const res = await sendMsg(inputMessage);
+      const res = await sendMsg(inputMessage, accessTokens);
       console.log(res.data.response_message);
 
       setMessages((prev) => [
         ...prev,
         { sender: "bot", text: res.data.response_message },
       ]);
-      setInputMessage(" ");
     } catch (error) {
       console.log("error in sending msg", error);
     }
