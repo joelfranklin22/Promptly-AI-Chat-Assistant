@@ -1,14 +1,18 @@
 import express from "express";
 import axios from "axios";
 import db from "../config/database.js";
+import { verifyTokens } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", verifyTokens, async (req, res) => {
   const req_msg = req.body.message;
-  console.log("req msg from frontend", req.body.message);
+  console.log("-------------------------------------------------------");
 
-  const user_id = req.body.id;
+  console.log("req msg from frontend", req.body.message);
+  console.log("-------------------------------------------------------");
+
+  const user_id = req.userId;
   console.log("user id", user_id);
 
   //   Storing user msg in db
