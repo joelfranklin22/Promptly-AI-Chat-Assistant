@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post("/", verifyTokens, async (req, res) => {
   const req_msg = req.body.message;
+  let chatId;
   console.log("-------------------------------------------------------");
 
   console.log("req msg from frontend", req.body.message);
@@ -21,6 +22,8 @@ router.post("/", verifyTokens, async (req, res) => {
       "INSERT INTO chats (users_id,sender_req) VALUE (?,?)",
       [user_id, req_msg],
     );
+    chatId = rows.insertId;
+
     console.log("db inserting rows", rows);
   } catch (error) {
     console.log("error in db inserting", error);
@@ -33,15 +36,16 @@ router.post("/", verifyTokens, async (req, res) => {
         message: req_msg,
       },
     );
+    console.log(res_n8n.data);
 
-    console.log(res_n8n.data.response_msg);
-    res.status(200).json({ response_message: res_n8n.data.response_msg });
+    console.log(res_n8n.data.message);
+    res.status(200).json({ response_message: res_n8n.data.message });
 
     // Inserting response data into db
     try {
       const [res_db] = await db.execute(
-        "INSERT INTO chats (users_id,sender_res) values(?,?)",
-        [user_id, res_n8n.data.response_msg],
+        "Update chats set sender_res=? where id=? AND users_id=?",
+        [res_n8n.data.message, chatId, user_id],
       );
       console.log(res_db);
     } catch (error) {
