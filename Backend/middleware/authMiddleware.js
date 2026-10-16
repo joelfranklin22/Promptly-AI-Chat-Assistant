@@ -5,6 +5,8 @@ export const verifyTokens = (req, res, next) => {
   if (!authHeader) return res.status(401).json({ msg: "No tokens Provided" });
 
   const token = authHeader.split(" ")[1];
+  console.log(authHeader);
+  
 
   if (!token) return res.status(401).json({ msg: "No tokens" });
 
