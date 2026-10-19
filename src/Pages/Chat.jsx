@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styles from "../styles/Chat.module.css";
 import { sendMsg } from "../api/authApi";
 import AuthContext from "../context/AuthContext";
@@ -8,27 +8,42 @@ function Chat() {
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const { accessTokens } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const bottomScroll = useRef();
 
   const sendData = async (e) => {
     e.preventDefault();
 
     console.log(inputMessage);
+    const message = inputMessage.trim();
+    if (!message) return;
+
     // adding input msg in the state
     setMessages((prev) => [...prev, { sender: "user", text: inputMessage }]);
 
     setInputMessage(" ");
     try {
       const res = await sendMsg(inputMessage, accessTokens);
+      setLoading(true);
       console.log(res.data.response_message);
-
+      setLoading(false);
       setMessages((prev) => [
         ...prev,
         { sender: "bot", text: res.data.response_message },
       ]);
     } catch (error) {
+      setError(true);
       console.log("error in sending msg", error);
     }
   };
+
+  //   Auto scroll to bottom in chat
+  useEffect(() => {
+    bottomScroll.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages, loading]);
 
   return (
     <>
@@ -86,9 +101,14 @@ function Chat() {
                     : styles.reqMessage
                 }
               >
-                <p>{messages.text}</p>
+                <div>{messages.text}</div>
               </div>
             ))}
+            {loading && <div className={styles.resMessage}>Typing... </div>}
+            {error && (
+              <div className={styles.resMessage}>something went wrong</div>
+            )}
+            <div ref={bottomScroll}></div>
           </section>
 
           {/* Footer */}
