@@ -26,7 +26,7 @@ router.post("/register", async (req, res) => {
     // user not exits in db so create new user
     else {
       // Hashing password
-      const hashedPassword = await bcyrpt.hash(password, 10);
+      const hashedPassword = await bcyrpt.hash(password,10);
 
       // Inserting into db name,email,hashed password
       const [rows] = await db.execute(
