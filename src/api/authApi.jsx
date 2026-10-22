@@ -34,3 +34,15 @@ export const sendMsg = async (message, accessTokens) => {
     },
   );
 };
+
+export const getHistory = async (accessTokens) => {
+  return axios.post(
+    "http://localhost:4000/history",
+    {}, 
+    {
+      headers: {
+        Authorization: `Bearer ${accessTokens}`,
+      },
+    },
+  );
+};
