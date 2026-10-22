@@ -6,8 +6,9 @@ import loginRoutes from "./routes/authLogin.js";
 import cookieParser from "cookie-parser";
 import refreshToken from "./utils/refreshToken.js";
 import chatRoutes from "./routes/chatRoute.js";
+import getHistory from "./utils/getHistory.js";
 
-const app = express();  
+const app = express();
 
 // Using cors for verifying frontend and backend
 app.use(
@@ -27,6 +28,7 @@ app.use("/api/auth", registerRoutes);
 app.use("/api/auth", loginRoutes);
 app.use("/api/refreshtokens", refreshToken);
 app.use("/chat", chatRoutes);
+app.use("/history", getHistory);
 
 app.listen(4000, () => {
   console.log("Server started Running");
