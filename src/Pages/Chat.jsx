@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import styles from "../styles/Chat.module.css";
-import { sendMsg } from "../api/authApi";
+import { sendMsg, getHistory } from "../api/authApi";
 import AuthContext from "../context/AuthContext";
 
 function Chat() {
@@ -38,6 +38,22 @@ function Chat() {
     }
   };
 
+  // Calling function to get chat history
+
+  const getChats = async () => {
+    console.log("History function called");
+
+    const resChat = await getHistory(accessTokens);
+    console.log(resChat.data.history[3].sender_req);
+    console.log(
+      resChat.data.history.map((index, msg) => {
+        console.log(index, msg.sender_req);
+      }),
+    );
+
+    console.log(resChat.data.history);
+  };
+
   //   Auto scroll to bottom in chat
   useEffect(() => {
     bottomScroll.current?.scrollIntoView({
@@ -63,8 +79,8 @@ function Chat() {
                 </button>
               </li>
               <li>
-                <button className={styles.chatItems}>
-                  <i>a</i> History
+                <button className={styles.chatItems} onClick={getChats}>
+                  Chat History
                 </button>
               </li>
             </ul>
