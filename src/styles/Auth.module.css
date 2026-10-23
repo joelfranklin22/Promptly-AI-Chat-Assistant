@@ -43,6 +43,12 @@ input::placeholder {
   font-style: italic;
   opacity: 0.8;
 }
+/* Forgot Password */
+.forgotPassword{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.1rem;
+}
 /* Login Btn Styles */
 .loginBtn {
   width: 100%;
@@ -77,3 +83,6 @@ input::placeholder {
   gap: 10px;
   text-align: center;
 }
+
+
+/* Forgot Password */
