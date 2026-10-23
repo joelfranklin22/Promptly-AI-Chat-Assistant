@@ -1,0 +1,13 @@
+.historyContainer {
+  padding: 1rem;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.historyItem {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
