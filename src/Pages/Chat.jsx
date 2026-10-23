@@ -1,60 +1,53 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import styles from "../styles/Chat.module.css";
-import { sendMsg, getHistory } from "../api/authApi";
+import { sendMsg } from "../api/authApi";
 import AuthContext from "../context/AuthContext";
+import Applayout from "../components/Applayout";
 
 function Chat() {
-  const [isOpen, setIsOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const { accessTokens } = useContext(AuthContext);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const bottomScroll = useRef();
 
+  const bottomScroll = useRef(null);
+
+  // Send message and receive bot response
   const sendData = async (e) => {
     e.preventDefault();
 
-    console.log(inputMessage);
     const message = inputMessage.trim();
-    if (!message) return;
 
-    // adding input msg in the state
-    setMessages((prev) => [...prev, { sender: "user", text: inputMessage }]);
+    if (!message || loading) return;
 
-    setInputMessage(" ");
+    // Display user's message immediately
+    setMessages((prev) => [...prev, { sender: "user", text: message }]);
+
+    setInputMessage("");
+    setLoading(true);
+    setError(false);
+
     try {
-      const res = await sendMsg(inputMessage, accessTokens);
-      setLoading(true);
-      console.log(res.data.response_message);
-      setLoading(false);
+      const res = await sendMsg(message, accessTokens);
+
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: res.data.response_message },
+        {
+          sender: "bot",
+          text: res.data.response_message,
+        },
       ]);
     } catch (error) {
       setError(true);
-      console.log("error in sending msg", error);
+      console.error("Error in sending message:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Calling function to get chat history
-
-  const getChats = async () => {
-    console.log("History function called");
-
-    const resChat = await getHistory(accessTokens);
-    console.log(resChat.data.history[3].sender_req);
-    console.log(
-      resChat.data.history.map((index, msg) => {
-        console.log(index, msg.sender_req);
-      }),
-    );
-
-    console.log(resChat.data.history);
-  };
-
-  //   Auto scroll to bottom in chat
+  // Auto-scroll when messages change
   useEffect(() => {
     bottomScroll.current?.scrollIntoView({
       behavior: "smooth",
@@ -62,92 +55,48 @@ function Chat() {
   }, [messages, loading]);
 
   return (
-    <>
-      <div className={styles.container}>
-        {/* Left Nav Side */}
-
-        <div className={`${styles.leftNav} ${isOpen ? styles.open : ""}`}>
-          <div className={styles.closeButton}>
-            <button onClick={() => setIsOpen(!isOpen)}>✕</button>
+    <Applayout>
+      {/* Chat messages */}
+      <section className={styles.chat}>
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={
+              msg.sender === "bot" ? styles.resMessage : styles.reqMessage
+            }
+          >
+            {msg.text}
           </div>
-          <div className={styles.botName}>Bot name</div>
-          <div className={styles.chatNav}>
-            <ul className={styles.chatOptions}>
-              <li>
-                <button className={styles.chatItems}>
-                  <i>a</i> Chat
-                </button>
-              </li>
-              <li>
-                <button className={styles.chatItems} onClick={getChats}>
-                  Chat History
-                </button>
-              </li>
-            </ul>
-            <div className={styles.divider}></div>
-            <div className={styles.profile}>
-              <p>Profile joel</p>
-              <button>Signout</button>
-            </div>
+        ))}
+
+        {loading && <div className={styles.resMessage}>Typing...</div>}
+
+        {error && (
+          <div className={styles.resMessage}>
+            Something went wrong. Please try again.
           </div>
-        </div>
+        )}
 
-        {/* Right Nav Side */}
-        <div className={styles.rightNav}>
-          {/* Header */}
+        <div ref={bottomScroll}></div>
+      </section>
 
-          <header className={styles.headerNav}>
-            <div className={styles.menuButton}>
-              <button onClick={() => setIsOpen(!isOpen)}>☰</button>
-            </div>
-            <div className={styles.headTitle}>
-              <p>Chatname</p>
-              <i>dark theme</i>
-            </div>
-          </header>
+      {/* Message input */}
+      <footer className={styles.messageFooter}>
+        <form onSubmit={sendData} className={styles.messageBox}>
+          <input
+            type="text"
+            placeholder="Type a message"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            disabled={loading}
+          />
 
-          {/* section */}
-          <section className={styles.chat}>
-            {messages.map((messages, index) => (
-              <div
-                key={index}
-                className={
-                  messages.sender === "bot"
-                    ? styles.resMessage
-                    : styles.reqMessage
-                }
-              >
-                <div>{messages.text}</div>
-              </div>
-            ))}
-            {loading && <div className={styles.resMessage}>Typing... </div>}
-            {error && (
-              <div className={styles.resMessage}>something went wrong</div>
-            )}
-            <div ref={bottomScroll}></div>
-          </section>
-
-          {/* Footer */}
-          <footer className="messageFooter">
-            <form action="" onSubmit={sendData} className={styles.messageBox}>
-              <input
-                type="text"
-                name=""
-                placeholder="Type a message"
-                value={inputMessage}
-                onChange={(e) => {
-                  setInputMessage(e.target.value);
-                }}
-              />
-
-              <button className={styles.sendChat} type="submit">
-                Send
-              </button>
-            </form>
-          </footer>
-        </div>
-      </div>
-    </>
+          <button className={styles.sendChat} type="submit" disabled={loading}>
+            Send
+          </button>
+        </form>
+      </footer>
+    </Applayout>
   );
 }
 
