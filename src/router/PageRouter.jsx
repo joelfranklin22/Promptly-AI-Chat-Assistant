@@ -2,14 +2,13 @@ import { Routes, Route } from "react-router-dom";
 import Register from "../Pages/Register";
 import Login from "../Pages/Login";
 import Chat from "../Pages/Chat";
-import ProtectedRoutes from "../components/ProtectedRoutes";
+import ChatHistory from "../Pages/chatHistory";
+import ProtectedRoutes from "./ProtectedRoutes";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 
 function PageRouter() {
-  const navigate = useNavigate();
   const { accessTokens, setAccessTokens } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -43,6 +42,7 @@ function PageRouter() {
         <Route path="/login" element={<Login />} />
         <Route element={<ProtectedRoutes />}>
           <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/history" element={<ChatHistory />} />
         </Route>
       </Routes>
     </>
