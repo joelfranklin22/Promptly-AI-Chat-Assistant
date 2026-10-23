@@ -36,8 +36,7 @@ router.post("/", verifyTokens, async (req, res) => {
         message: req_msg,
       },
     );
-    console.log(res_n8n.data);
-
+    console.log(res_n8n);
     console.log(res_n8n.data.message);
     res.status(200).json({ response_message: res_n8n.data.message });
 
