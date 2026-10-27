@@ -1,16 +1,18 @@
 import { Routes, Route } from "react-router-dom";
 import Register from "../Pages/Register";
 import Login from "../Pages/Login";
-import Chat from "../Pages/Chat";
-import ChatHistory from "../Pages/chatHistory";
 import ProtectedRoutes from "./ProtectedRoutes";
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { lazy, Suspense, useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
+
+const Chat = lazy(() => import("../Pages/Chat.jsx"));
+const ChatHistory = lazy(() => import("../Pages/chatHistory.jsx"));
 
 function PageRouter() {
   const { accessTokens, setAccessTokens } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     async function checkTokens() {
       try {
@@ -37,14 +39,16 @@ function PageRouter() {
   if (loading) return <div>Loading....</div>;
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/chat/history" element={<ChatHistory />} />
-        </Route>
-      </Routes>
+      <Suspense fallback={<div>Loading Page....</div>}>
+        <Routes>
+          <Route path="/" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/chat/history" element={<ChatHistory />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </>
   );
 }
