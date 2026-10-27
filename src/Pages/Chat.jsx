@@ -3,6 +3,7 @@ import styles from "../styles/Chat.module.css";
 import { sendMsg } from "../api/authApi";
 import AuthContext from "../context/AuthContext";
 import Applayout from "../components/Applayout";
+import Markdown from "react-markdown";
 
 function Chat() {
   const [inputMessage, setInputMessage] = useState("");
@@ -65,7 +66,7 @@ function Chat() {
               msg.sender === "bot" ? styles.resMessage : styles.reqMessage
             }
           >
-            {msg.text}
+            <Markdown>{msg.text}</Markdown>
           </div>
         ))}
 
