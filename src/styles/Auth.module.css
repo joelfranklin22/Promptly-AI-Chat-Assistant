@@ -44,10 +44,14 @@ input::placeholder {
   opacity: 0.8;
 }
 /* Forgot Password */
-.forgotPassword{
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 0.1rem;
+.forgotPassword {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.1rem;
+}
+.errorblock {
+  font-weight: bold;
+  color: red;
 }
 /* Login Btn Styles */
 .loginBtn {
@@ -83,6 +87,5 @@ input::placeholder {
   gap: 10px;
   text-align: center;
 }
-
 
 /* Forgot Password */
