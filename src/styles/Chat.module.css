@@ -126,21 +126,26 @@
 
 /* Bot message */
 .resMessage {
+  max-width: 85%;
+  width: fit-content;
   align-self: flex-start;
-  max-width: 75%;
-  padding: 1rem;
-  border: 1px solid orange;
-  border-radius: 12px;
+
+  white-space: pre-wrap;
   overflow-wrap: anywhere;
-  line-height: 1.5;
+
+  line-height: 1.7;
+  padding: 14px 18px;
+  margin: 10px 0;
+  border-radius: 12px;
 }
 
 /* User message */
 .reqMessage {
+  background-color: rgb(42, 41, 41);
+  color: white;
   align-self: flex-end;
   max-width: 75%;
   padding: 1rem;
-  border: 1px solid dodgerblue;
   border-radius: 12px;
   overflow-wrap: anywhere;
   line-height: 1.5;
