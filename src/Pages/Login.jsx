@@ -4,11 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { checkUser } from "../api/authApi";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../context/AuthContext";
 
 function Login() {
   const { setAccessTokens } = useContext(AuthContext);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const schema = z.object({
@@ -30,11 +31,18 @@ function Login() {
         setAccessTokens(res.data.accessToken);
         reset();
         console.log(res.data);
+        console.log(res.data.name);
         console.log(data);
+
+        localStorage.setItem("username", res.data.name);
         navigate("/chat");
       }
     } catch (error) {
-      console.log(error.response?.data?.msg || "login failed");
+      console.log(
+        "this is error msg console from login catch",
+        error.response?.data?.msg || "login failed",
+      );
+      setError(error.response?.data?.msg);
     }
   };
 
@@ -70,7 +78,9 @@ function Login() {
                 <div className={styles.errorMsg}>{errors.password.message}</div>
               )}
             </div>
+
             <div className={styles.forgotPassword}>
+              <div className={styles.errorblock}>{error} </div>
               <Link to="#">Forgot Password ?</Link>
             </div>
             <button type="submit" className={styles.loginBtn}>
