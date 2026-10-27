@@ -6,6 +6,8 @@ function Applayout({ children }) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
+  const userName = localStorage.getItem("username");
+
   const closeSidebar = () => {
     setIsOpen(false);
   };
@@ -26,7 +28,10 @@ function Applayout({ children }) {
               <button
                 type="button"
                 className={styles.chatItems}
-                onClick={closeSidebar}
+                onClick={() => {
+                  closeSidebar();
+                  navigate("/chat");
+                }}
               >
                 <i>a</i>
                 <span>Chat</span>
@@ -50,7 +55,7 @@ function Applayout({ children }) {
           <div className={styles.divider}></div>
 
           <div className={styles.profile}>
-            <p>Profile joel</p>
+            <p>{userName}</p>
             <button type="button">Signout</button>
           </div>
         </div>
