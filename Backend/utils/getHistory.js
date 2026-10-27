@@ -10,11 +10,11 @@ router.post("/", verifyTokens, async (req, res) => {
   console.log(user_Id);
   console.log("------------------------------");
 
-  const [rows] = await db.execute("Select * from chats where users_id=?", [
+  const [rows] = await db.execute("Select * from chats where user_id=?", [
     user_Id,
   ]);
 
-  res.status(200).json({ history: rows });
+  res.status(200).json({history: rows });
 
   console.log(rows);
 
