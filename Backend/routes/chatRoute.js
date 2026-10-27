@@ -19,7 +19,7 @@ router.post("/", verifyTokens, async (req, res) => {
   //   Storing user msg in db
   try {
     const [rows] = await db.execute(
-      "INSERT INTO chats (users_id,sender_req) VALUE (?,?)",
+      "INSERT INTO chats (user_id,sendmsg) VALUE (?,?)",
       [user_id, req_msg],
     );
     chatId = rows.insertId;
@@ -43,7 +43,7 @@ router.post("/", verifyTokens, async (req, res) => {
     // Inserting response data into db
     try {
       const [res_db] = await db.execute(
-        "Update chats set sender_res=? where id=? AND users_id=?",
+        "Update chats set receivemsg=? where id=? AND user_id=?",
         [res_n8n.data.message, chatId, user_id],
       );
       console.log(res_db);
