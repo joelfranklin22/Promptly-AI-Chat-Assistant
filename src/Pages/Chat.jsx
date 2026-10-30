@@ -4,6 +4,7 @@ import { sendMsg } from "../api/authApi";
 import AuthContext from "../context/AuthContext";
 import Applayout from "../components/Applayout";
 import Markdown from "react-markdown";
+import { getHistory } from "../api/authApi";
 
 function Chat() {
   const [inputMessage, setInputMessage] = useState("");
@@ -47,6 +48,29 @@ function Chat() {
       setLoading(false);
     }
   };
+  //   Get History when the page refreshes
+  useEffect(() => {
+    async function history() {
+      try {
+        const query = "today";
+        const res = await getHistory(accessTokens, query);
+        console.log(res.data.history);
+
+        const formattedmessage = res.data.history.flatMap((chat) => [
+          ...(chat.sendmsg ? [{ sender: "user", text: chat.sendmsg }] : []),
+          ...(chat.receivemsg
+            ? [{ sender: "bot", text: chat.receivemsg }]
+            : []),
+        ]);
+        setMessages(formattedmessage);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (accessTokens) {
+      history();
+    }
+  }, [accessTokens]);
 
   // Auto-scroll when messages change
   useEffect(() => {
@@ -57,7 +81,6 @@ function Chat() {
 
   return (
     <Applayout>
-      {/* Chat messages */}
       <section className={styles.chat}>
         {messages.map((msg, index) => (
           <div
