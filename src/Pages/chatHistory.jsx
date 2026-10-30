@@ -12,7 +12,8 @@ function ChatHistory() {
   useEffect(() => {
     const getChats = async () => {
       try {
-        const res = await getHistory(accessTokens);
+        const query = "all";
+        const res = await getHistory(accessTokens, query);
         console.log(res.data);
 
         setHistory(res.data.history);
