@@ -35,10 +35,10 @@ export const sendMsg = async (message, accessTokens) => {
   );
 };
 
-export const getHistory = async (accessTokens) => {
+export const getHistory = async (accessTokens, query) => {
   return axios.post(
-    "http://localhost:4000/history",
-    {}, 
+    `http://localhost:4000/history?filter=${query}`,
+    {},
     {
       headers: {
         Authorization: `Bearer ${accessTokens}`,
