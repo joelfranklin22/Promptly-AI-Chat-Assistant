@@ -13,7 +13,7 @@ function PageRouter() {
   const { accessTokens, setAccessTokens } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(() => { 
     async function checkTokens() {
       try {
         const res = await axios.post(
